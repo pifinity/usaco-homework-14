@@ -1,0 +1,57 @@
+import java.io.*;
+import java.util.*;
+
+public class SleepyCowHerding {
+    static int N;
+    static Integer[] cows;
+
+    static int getMin(){
+        if (cows[N-2]-cows[0]==N-2 && cows[N-1]-cows[N-2]>2) return 2;
+        if (cows[N-1]-cows[1]==N-2 && cows[1]-cows[0]>2) return 2;
+
+        int min = 0;
+
+        for (int i=0; i<N; i++) {
+            int counter = i;
+
+            while (counter<N-1 && cows[counter+1] - cows[i]+1 <= N) {
+                counter++;
+            }
+
+            min = Math.max(min, counter-i+1);
+        }
+
+        return N-min;
+    }
+
+
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf= new BufferedReader(new FileReader("herding.in"));
+        PrintWriter out =new PrintWriter("herding.out");
+
+        N = Integer.parseInt(bf.readLine());
+        cows = new Integer[N];
+
+        for (int i=0;  i<N; i++){
+            cows[i] = Integer.parseInt(bf.readLine());
+        }
+
+        Arrays.sort(cows);
+        int ret1 = getMin();
+
+        out.println(ret1);
+
+
+        int  temp = Math.min(cows[1]-cows[0]-1, cows[N-1]-cows[N-2]-1);
+
+        int spaces = cows[N-1]-cows[0]+1-N;
+
+       out.println(spaces-temp);
+       out.close();
+
+
+
+
+    }
+}
