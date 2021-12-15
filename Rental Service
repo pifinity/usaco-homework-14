@@ -1,0 +1,119 @@
+import java.io.*;
+import java.util.*;
+
+public class RentalService {
+
+    static class store implements Comparable<store>{
+        int amount,price;
+
+        public store(int amount, int price){
+            this.amount = amount;
+            this.price = price;
+        }
+
+        public int compareTo(store o) {return o.price-this.price;}
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf= new BufferedReader(new FileReader("rental.in"));
+        PrintWriter out = new PrintWriter("rental.out");
+        StringTokenizer st = new StringTokenizer(bf.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
+
+        int[] cows = new int[N];
+        store[] stores = new store[M];
+        Integer[] rentals = new Integer[K];
+
+        for (int i=0; i<N; i++){
+            cows[i] = Integer.parseInt(bf.readLine());
+        }
+
+        Arrays.sort(cows);
+
+        for (int c=0; c<M; c++){
+            st = new StringTokenizer(bf.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+            stores[c] = new store(a, b);
+        }
+
+        Arrays.sort(stores);
+
+   /*     for (store i : stores){
+            System.out.println(i.price+" "+i.amount);
+        }
+
+    */
+
+        for (int i=0; i<K; i++){
+            rentals[i] = Integer.parseInt(bf.readLine());
+        }
+
+        Arrays.sort(rentals, Collections.reverseOrder());
+
+       // System.out.println(Arrays.toString(cows));
+     //   System.out.println(Arrays.toString(rentals));
+
+
+        long rentalProfit = 0;
+        long storeProfit = 0;
+
+        for (int i=0; i<K && i<N; i++){
+            rentalProfit += rentals[i];
+        }
+
+
+        int place = N-1;
+        int storePlace = 0;
+
+        long ret = rentalProfit;
+        while (place>=0){
+            if (place<K) {
+                rentalProfit -= rentals[place];
+            }
+
+            int milkGained = cows[place];
+
+            while (milkGained>0 && storePlace <M){
+                if (stores[storePlace].amount>milkGained){
+                    storeProfit += (long) milkGained *stores[storePlace].price;
+
+                    stores[storePlace].amount-=milkGained;
+                    milkGained = 0;
+                }else if (stores[storePlace].amount==milkGained){
+                    storeProfit += milkGained*stores[storePlace].price;
+                    milkGained= 0;
+                    storePlace++;
+                }else if (stores[storePlace].amount<milkGained){
+                    storeProfit += stores[storePlace].amount*stores[storePlace].price;
+                    milkGained -= stores[storePlace].amount;
+                    storePlace++;
+
+                }
+            }
+
+     //       System.out.println(rentalProfit+" "+storeProfit);
+
+            place--;
+            ret = Math.max(ret, storeProfit+rentalProfit);
+
+
+
+
+
+        }
+
+        out.println(ret);
+        System.out.println(ret);
+        out.close();
+
+
+
+
+    }
+
+}
