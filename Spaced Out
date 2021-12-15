@@ -1,0 +1,53 @@
+import java.io.*;
+import java.util.*;
+
+public class SpacedOut {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(bf.readLine());
+        int[][] pasture = new int[N][N];
+
+        for (int i=0; i<N; i++){
+            StringTokenizer st =new StringTokenizer(bf.readLine());
+
+            for (int j=0; j<N; j++){
+                pasture[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+     //   System.out.println(Arrays.deepToString(pasture));
+
+        int ret1 = 0;
+
+        for (int col = 0; col<N; col++){
+            int evenCount = 0;
+            for (int r = 0; r<N; r+=2){
+                evenCount+=pasture[r][col];
+            }
+            int oddCount = 0;
+            for (int r = 1; r<N; r+=2){
+                oddCount += pasture[r][col];
+            }
+
+            ret1+=Math.max(evenCount, oddCount);
+        }
+
+        int ret2 = 0;
+
+        for (int row =0; row<N; row++){
+            int evenCount =0 ;
+            for (int c = 0; c<N; c+=2){
+                evenCount+=pasture[row][c];
+            }
+            int oddCount = 0;
+            for (int c = 1; c<N; c+=2){
+                oddCount += pasture[row][c];
+            }
+
+            ret2+=Math.max(evenCount, oddCount);
+        }
+
+        System.out.println(Math.max(ret1, ret2));
+    }
+}
